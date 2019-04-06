@@ -1,9 +1,10 @@
-package io.github.dogganidhal.chatpro.view;
+package io.github.dogganidhal.chatpro.ui.activity;
 
 import android.view.Gravity;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import io.github.dogganidhal.chatpro.ui.view.TitleView;
 
 class BaseActivity extends AppCompatActivity {
 

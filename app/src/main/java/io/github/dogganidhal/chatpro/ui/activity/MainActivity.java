@@ -1,22 +1,24 @@
-package io.github.dogganidhal.chatpro.view;
+package io.github.dogganidhal.chatpro.ui.activity;
 
 import android.content.res.Resources;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.dogganidhal.chatpro.R;
+import io.github.dogganidhal.chatpro.model.Discussion;
+import io.github.dogganidhal.chatpro.ui.fragment.ContactsFragment;
+import io.github.dogganidhal.chatpro.ui.fragment.DiscussionsFragment;
+import io.github.dogganidhal.chatpro.ui.fragment.SettingsFragment;
 
-import android.view.Gravity;
 import android.view.MenuItem;
 
-public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity
+  implements BottomNavigationView.OnNavigationItemSelectedListener,
+  DiscussionsFragment.OnListFragmentInteractionListener  {
 
   private DiscussionsFragment mDiscussionFragment;
   private ContactsFragment mContactsFragment;
@@ -95,4 +97,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     return this.mSettingsFragment;
   }
 
+  @Override
+  public void onListFragmentInteraction(Discussion discussion) {
+    System.out.println(discussion);
+  }
 }

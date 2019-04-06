@@ -1,4 +1,4 @@
-package io.github.dogganidhal.chatpro.view;
+package io.github.dogganidhal.chatpro.ui.fragment;
 
 import androidx.lifecycle.ViewModelProviders;
 
@@ -7,31 +7,32 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import io.github.dogganidhal.chatpro.viewmodel.DiscussionsViewModel;
-import io.github.dogganidhal.chatpro.R;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class DiscussionsFragment extends Fragment {
+import io.github.dogganidhal.chatpro.R;
+import io.github.dogganidhal.chatpro.viewmodel.ContactsViewModel;
 
-	private DiscussionsViewModel mViewModel;
+public class ContactsFragment extends Fragment {
 
-	public static DiscussionsFragment newInstance() {
-		return new DiscussionsFragment();
+	private ContactsViewModel mViewModel;
+
+	public static ContactsFragment newInstance() {
+		return new ContactsFragment();
 	}
 
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
 													 @Nullable Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.discussions_fragment, container, false);
+		return inflater.inflate(R.layout.contacts_fragment, container, false);
 	}
 
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mViewModel = ViewModelProviders.of(this).get(DiscussionsViewModel.class);
+		mViewModel = ViewModelProviders.of(this).get(ContactsViewModel.class);
 		// TODO: Use the ViewModel
 	}
 

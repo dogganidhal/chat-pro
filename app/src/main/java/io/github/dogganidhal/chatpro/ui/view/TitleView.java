@@ -1,4 +1,4 @@
-package io.github.dogganidhal.chatpro.view;
+package io.github.dogganidhal.chatpro.ui.view;
 
 import android.content.Context;
 import android.view.Gravity;
