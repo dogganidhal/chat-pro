@@ -1,19 +1,22 @@
 package io.github.dogganidhal.chatpro.view;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.dogganidhal.chatpro.R;
 
-import android.os.PersistableBundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
   private DiscussionsFragment mDiscussionFragment;
   private ContactsFragment mContactsFragment;
@@ -27,21 +30,25 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     super.onCreate(savedInstanceState);
     this.setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
-    this.setupBottomNavigationView();
+    this.setup();
   }
 
   @Override
   public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    Resources resource = this.getResources();
     Fragment contentFragment = null;
     switch (item.getItemId()) {
-      case R.id.navigation_home:
+      case R.id.navigation_discussions:
         contentFragment = this.getDiscussionFragment();
+        this.setActionBarTitle(resource.getString(R.string.title_discussions), null);
         break;
-      case R.id.navigation_dashboard:
+      case R.id.navigation_contacts:
         contentFragment = this.getContactsFragment();
+        this.setActionBarTitle(resource.getString(R.string.title_contacts), null);
         break;
-      case R.id.navigation_notifications:
+      case R.id.navigation_settings:
         contentFragment = this.getSettingsFragment();
+        this.setActionBarTitle(resource.getString(R.string.title_settings), null);
         break;
     }
     if (contentFragment != null) {
@@ -54,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     return false;
   }
 
-  private void setupBottomNavigationView() {
+  private void setup() {
+    this.setActionBarTitle(this.getResources().getString(R.string.title_discussions), null);
     this.getSupportFragmentManager()
       .beginTransaction()
       .replace(R.id.activity_main_content_fragment, this.getDiscussionFragment())
