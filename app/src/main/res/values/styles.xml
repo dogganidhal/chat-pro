@@ -1,23 +1,31 @@
 <resources>
 
-    <style name="ChatProActivityTheme" parent="Theme.MaterialComponents.Light">
+    <style name="ChatProAppTheme" parent="Theme.MaterialComponents.Light">
         <item name="colorPrimary">@color/pink</item>
         <item name="android:statusBarColor">@color/white</item>
         <item name="actionBarStyle">@style/ChatProActionBarStyle</item>
         <item name="bottomNavigationStyle">@style/ChatProBottomNavigationBarTheme</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
+        <item name="android:buttonStyle">@style/RobotoButtonStyle</item>
     </style>
-
-    <style name="ChatProAppTheme" parent="Theme.AppCompat.Light"/>
 
     <style name="ChatProActionBarStyle" parent="Base.Widget.AppCompat.ActionBar">
         <item name="background">@color/white</item>
-        <item name="elevation">0dp</item>
+        <item name="elevation">1dp</item>
     </style>
 
     <style name="ChatProBottomNavigationBarTheme" parent="Widget.Design.BottomNavigationView">
         <item name="background">@color/white</item>
-        <item name="elevation">0dp</item>
+        <item name="elevation">1dp</item>
+    </style>
+
+    <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="RobotoButtonStyle" parent="android:Widget.Holo.Button">
+        <item name="android:fontFamily">@font/roboto_regular</item>
     </style>
 
 </resources>

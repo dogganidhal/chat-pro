@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "50125738530",
+    "firebase_url": "https://insta-chat-pro.firebaseio.com",
+    "project_id": "insta-chat-pro",
+    "storage_bucket": "insta-chat-pro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:50125738530:android:9ce9ea220665f14e",
+        "android_client_info": {
+          "package_name": "io.github.dogganidhal.chatpro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "50125738530-mnejc9ig1hqndt77sc0q5er86mgk54pq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.github.dogganidhal.chatpro",
+            "certificate_hash": "228dec31cd6ecdb28c586471a1f1e684df05c219"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJOWLKu_Zq_Le7ps04eWBbhXo2PavpvDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "50125738530-ni5i154koa18ik1ou5uiahljkjtbct1f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
