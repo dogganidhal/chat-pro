@@ -60,7 +60,7 @@ public class SignUpFragment extends Fragment implements AuthViewModel.FacebookLo
   @Override
   public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    mViewModel = ViewModelProviders.of(this).get(AuthViewModel.class);
+    this.mViewModel = ViewModelProviders.of(this.getActivity()).get(AuthViewModel.class);
     this.mFacebookLoginButton.setReadPermissions("email", "public_profile");
     this.mViewModel.setUpFacebookLoginButton(this.mFacebookLoginButton, this);
   }
