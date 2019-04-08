@@ -34,4 +34,8 @@
         <item name="android:textColor">@color/textBlack</item>
     </style>
 
+    <style name="ViewPagerStyle" parent="ChatProAppTheme">
+
+    </style>
+
 </resources>

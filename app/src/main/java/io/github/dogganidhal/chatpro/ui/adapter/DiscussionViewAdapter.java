@@ -1,4 +1,4 @@
-package io.github.dogganidhal.chatpro.ui.view;
+package io.github.dogganidhal.chatpro.ui.adapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

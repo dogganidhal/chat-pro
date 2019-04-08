@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import io.github.dogganidhal.chatpro.R;
 import io.github.dogganidhal.chatpro.model.Discussion;
 import io.github.dogganidhal.chatpro.model.dummy.DummyDiscussions;
-import io.github.dogganidhal.chatpro.ui.view.DiscussionViewAdapter;
+import io.github.dogganidhal.chatpro.ui.adapter.DiscussionViewAdapter;
 
 /**
  * A fragment representing a list of Items.

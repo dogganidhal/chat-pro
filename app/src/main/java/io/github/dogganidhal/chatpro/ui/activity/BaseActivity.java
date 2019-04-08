@@ -1,18 +1,20 @@
 package io.github.dogganidhal.chatpro.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.view.Gravity;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.dogganidhal.chatpro.ui.view.TitleView;
 
-class BaseActivity extends AppCompatActivity {
+@SuppressLint("Registered")
+public class BaseActivity extends AppCompatActivity {
 
   protected void setActionBarTitle(String title, String subtitle) {
     ActionBar.LayoutParams params = new ActionBar.LayoutParams(
-            ActionBar.LayoutParams.WRAP_CONTENT,
-            ActionBar.LayoutParams.MATCH_PARENT,
-            Gravity.CENTER
+      ActionBar.LayoutParams.WRAP_CONTENT,
+      ActionBar.LayoutParams.MATCH_PARENT,
+      Gravity.CENTER
     );
     ActionBar actionBar = this.getSupportActionBar();
     if (actionBar != null) {
