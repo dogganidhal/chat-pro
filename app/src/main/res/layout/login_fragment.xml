@@ -1,13 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.LoginFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.fragment.LoginFragment"
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Login" />
+        android:layout_marginTop="32dp"
+        android:orientation="vertical">
 
-</FrameLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email"
+            app:boxBackgroundColor="@null">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/login_fragment_email_text_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Mot de passe"
+            app:boxBackgroundColor="@null">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/login_fragment_password_text_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            android:text="SE CONNECTER AVEC"
+            android:fontFamily="@font/roboto_medium"/>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <ImageButton
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:src="@drawable/ic_google_icon"
+                android:background="@null"
+                android:layout_margin="16dp"/>
+
+            <ImageButton
+                android:layout_width="84dp"
+                android:layout_height="84dp"
+                android:src="@drawable/ic_facebook_icon"
+                android:background="@null"
+                android:layout_margin="16dp"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/login_fragment_login_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:padding="16dp"
+            android:text="SE CONNECTER"
+            android:layout_gravity="bottom"/>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

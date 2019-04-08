@@ -34,8 +34,9 @@
         <item name="android:textColor">@color/textBlack</item>
     </style>
 
-    <style name="ViewPagerStyle" parent="ChatProAppTheme">
-
+    <style name="EditTextStyle" parent="Base.Widget.AppCompat.EditText">
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:hint">@color/pink</item>
     </style>
 
 </resources>
