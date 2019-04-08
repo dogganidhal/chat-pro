@@ -1,4 +1,4 @@
-package io.github.dogganidhal.chatpro.ui.fragment;
+package io.github.dogganidhal.chatpro.ui.view;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,31 +13,22 @@ import butterknife.ButterKnife;
 import io.github.dogganidhal.chatpro.R;
 import io.github.dogganidhal.chatpro.model.Discussion;
 import io.github.dogganidhal.chatpro.model.Message;
-import io.github.dogganidhal.chatpro.ui.fragment.DiscussionsFragment.OnListFragmentInteractionListener;
+import io.github.dogganidhal.chatpro.ui.fragment.DiscussionsFragment.OnDiscussionClickListener;
 import io.github.dogganidhal.chatpro.utils.DateUtils;
 
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.chrono.ChronoLocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.time.temporal.Temporal;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Discussion} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
+ * specified {@link OnDiscussionClickListener}.
  */
 public class DiscussionViewAdapter extends RecyclerView.Adapter<DiscussionViewAdapter.ViewHolder> {
 
   private final List<Discussion> mDiscussions;
-  private final OnListFragmentInteractionListener mListener;
+  private final OnDiscussionClickListener mListener;
 
-  DiscussionViewAdapter(List<Discussion> items, OnListFragmentInteractionListener listener) {
+  public DiscussionViewAdapter(List<Discussion> items, OnDiscussionClickListener listener) {
     this.mDiscussions = items;
     this.mListener = listener;
   }
@@ -56,14 +47,14 @@ public class DiscussionViewAdapter extends RecyclerView.Adapter<DiscussionViewAd
     holder.setDiscussion(discussion);
     holder.setOnClickListener(view -> {
       if (mListener != null) {
-        mListener.onListFragmentInteraction(discussion);
+        mListener.onDiscussionViewClicked(discussion);
       }
     });
   }
 
   @Override
   public int getItemCount() {
-    return mDiscussions.size();
+    return this.mDiscussions.size();
   }
 
   class ViewHolder extends RecyclerView.ViewHolder {
@@ -80,6 +71,7 @@ public class DiscussionViewAdapter extends RecyclerView.Adapter<DiscussionViewAd
     @BindView(R.id.discussion_last_message_date)
     TextView mDiscussionLastMessageDateTextView;
 
+    private View mView;
     private View.OnClickListener mOnClickListener;
 
     void setOnClickListener(View.OnClickListener onClickListener) {
@@ -105,8 +97,9 @@ public class DiscussionViewAdapter extends RecyclerView.Adapter<DiscussionViewAd
 
     ViewHolder(View view) {
       super(view);
-      ButterKnife.bind(this, view);
-      view.setOnClickListener(this.mOnClickListener);
+      this.mView = view;
+      ButterKnife.bind(this, this.mView);
+      this.mView.setOnClickListener(this.mOnClickListener);
     }
   }
 }

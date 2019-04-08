@@ -10,6 +10,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.dogganidhal.chatpro.R;
 import io.github.dogganidhal.chatpro.model.Discussion;
+import io.github.dogganidhal.chatpro.model.User;
 import io.github.dogganidhal.chatpro.ui.fragment.ContactsFragment;
 import io.github.dogganidhal.chatpro.ui.fragment.DiscussionsFragment;
 import io.github.dogganidhal.chatpro.ui.fragment.SettingsFragment;
@@ -18,7 +19,8 @@ import android.view.MenuItem;
 
 public class MainActivity extends BaseActivity
   implements BottomNavigationView.OnNavigationItemSelectedListener,
-  DiscussionsFragment.OnListFragmentInteractionListener  {
+  DiscussionsFragment.OnDiscussionClickListener,
+    ContactsFragment.OnContactClickListener {
 
   private DiscussionsFragment mDiscussionFragment;
   private ContactsFragment mContactsFragment;
@@ -98,7 +100,12 @@ public class MainActivity extends BaseActivity
   }
 
   @Override
-  public void onListFragmentInteraction(Discussion discussion) {
+  public void onDiscussionViewClicked(Discussion discussion) {
     System.out.println(discussion);
+  }
+
+  @Override
+  public void onContactViewClicked(User contact) {
+    System.out.println(contact);
   }
 }
