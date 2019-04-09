@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,14 +19,15 @@ import io.github.dogganidhal.chatpro.R;
 
 public class MessageView extends FrameLayout {
 
-  private static final String MESSAGE_OWNER_CURRENT = "0";
-  private static final String MESSAGE_OWNER_OTHER = "1";
+  static final String MESSAGE_OWNER_CURRENT = "0";
+  static final String MESSAGE_OWNER_OTHER = "1";
 
+  private String mAuthorName = null;
   private String mMessageContent = "";
   private String mMessageTimeStamp = "";
   private String mMessageOwner = MESSAGE_OWNER_CURRENT;
 
-  private Unbinder mUnbinder;
+  private Unbinder mUnBinder;
 
   @BindView(R.id.message_view_holder)
   View mMessageContentHolderView;
@@ -35,6 +37,9 @@ public class MessageView extends FrameLayout {
 
   @BindView(R.id.message_view_content_view)
   LinearLayout mContentView;
+
+  @BindView(R.id.message_author_text_view)
+  TextView mAuthorTextView;
 
   public MessageView(Context context) {
     super(context);
@@ -53,19 +58,20 @@ public class MessageView extends FrameLayout {
 
   private void init(Context context, AttributeSet attrs, int defStyle) {
     // Load attributes
-    final TypedArray a = getContext().obtainStyledAttributes(
-            attrs, R.styleable.MessageView, defStyle, 0);
+    final TypedArray attributes = this.getContext()
+      .obtainStyledAttributes(attrs, R.styleable.MessageView, defStyle, 0);
 
-    this.mMessageContent = a.getString(R.styleable.MessageView_messageContent);
-    this.mMessageTimeStamp = a.getString(R.styleable.MessageView_messageTimestamp);
-    this.mMessageOwner = a.getString(R.styleable.MessageView_owner);
+    this.mMessageContent = attributes.getString(R.styleable.MessageView_messageContent);
+    this.mMessageTimeStamp = attributes.getString(R.styleable.MessageView_messageTimestamp);
+    this.mMessageOwner = attributes.getString(R.styleable.MessageView_owner);
+    this.mAuthorName = attributes.getString(R.styleable.MessageView_messageAuthorName);
 
-    a.recycle();
+    attributes.recycle();
 
     View contentView = LayoutInflater.from(context).inflate(R.layout.view_message, null);
     this.addView(contentView);
 
-    this.mUnbinder = ButterKnife.bind(this);
+    this.mUnBinder = ButterKnife.bind(this);
 
     int background = this.mMessageOwner.equals(MESSAGE_OWNER_CURRENT) ?
       R.drawable.current_user_message_view_background :
@@ -83,6 +89,18 @@ public class MessageView extends FrameLayout {
 
     this.mContentView.setGravity(gravity);
 
+    if (this.mAuthorName != null && this.mMessageOwner.equals(MESSAGE_OWNER_OTHER)) {
+      this.mAuthorTextView.setText(this.mAuthorName);
+    } else {
+      this.mAuthorTextView.setVisibility(View.GONE);
+    }
+
+  }
+
+  @Override
+  protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
+    this.mUnBinder.unbind();
   }
 
   public String getMessageContent() {
@@ -107,5 +125,13 @@ public class MessageView extends FrameLayout {
 
   public void setMessageOwner(String messageOwner) {
     this.mMessageOwner = messageOwner;
+  }
+
+  public String getAuthorName() {
+    return mAuthorName;
+  }
+
+  public void setAuthorName(String authorName) {
+    this.mAuthorName = authorName;
   }
 }

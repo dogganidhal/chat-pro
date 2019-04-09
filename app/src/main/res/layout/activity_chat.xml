@@ -8,24 +8,17 @@
     tools:context=".ui.activity.ChatActivity"
     android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lineGray"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
     </androidx.recyclerview.widget.RecyclerView>
-
-    <io.github.dogganidhal.chatpro.ui.view.MessageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:owner="current"
-        app:messageContent="Mihi animus patriam me esse ac me animus maximis in perennis coegit quodam Patres viderem.Mihi animus patriam me esse ac me animus maximis in perennis coegit quodam Patres viderem."/>
-
-    <io.github.dogganidhal.chatpro.ui.view.MessageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:owner="other"
-        app:messageContent="Mihi animus patriam me esse ac me animus maximis in perennis coegit quodam Patres viderem.Mihi animus patriam me esse ac me animus maximis in perennis coegit quodam Patres viderem."/>
 
     <View
         android:layout_width="match_parent"

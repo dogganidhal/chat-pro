@@ -1,6 +1,7 @@
 <resources>
     <declare-styleable name="MessageView">
         <attr name="messageContent" format="string" />
+        <attr name="messageAuthorName" format="string" />
         <attr name="messageTimestamp" format="string"/>
         <attr name="owner" format="enum" >
             <enum name="current" value="0"/>

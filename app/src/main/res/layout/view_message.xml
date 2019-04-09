@@ -4,24 +4,43 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:weightSum="4"
+    android:weightSum="3"
     android:gravity="end">
 
     <LinearLayout
-        android:id="@+id/message_view_holder"
+        android:layout_weight="2
+"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:layout_weight="3"
-        android:background="@drawable/current_user_message_view_background">
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/message_view_content_text_view"
+            android:id="@+id/message_author_text_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:text="SAMPLE TEXT" />
+            android:textColor="@color/darkGray"
+            android:textSize="14sp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="John DOE"
+            android:layout_gravity="start"
+            android:layout_margin="8dp"/>
+
+        <LinearLayout
+            android:id="@+id/message_view_holder"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:padding="16dp"
+            android:background="@drawable/current_user_message_view_background">
+
+            <TextView
+                android:id="@+id/message_view_content_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:text="SAMPLE TEXT" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

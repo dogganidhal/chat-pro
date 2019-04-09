@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,9 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.Arrays;
-import java.util.List;
 
 import io.github.dogganidhal.chatpro.R;
 import io.github.dogganidhal.chatpro.model.User;
@@ -41,8 +37,7 @@ public class ContactsFragment extends Fragment {
   }
 
   @Override
-  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+  public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_contact_list, container, false);
     this.mViewModel = ViewModelProviders.of(this).get(ContactsViewModel.class);
 
@@ -67,15 +62,14 @@ public class ContactsFragment extends Fragment {
     if (context instanceof OnContactClickListener) {
       mListener = (OnContactClickListener) context;
     } else {
-      throw new RuntimeException(context.toString()
-              + " must implement OnContactClickListener");
+      throw new RuntimeException(context.toString() + " must implement OnContactClickListener");
     }
   }
 
   @Override
   public void onDetach() {
     super.onDetach();
-    mListener = null;
+    this.mListener = null;
   }
 
   /**
