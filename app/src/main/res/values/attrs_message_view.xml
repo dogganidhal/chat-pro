@@ -1,0 +1,10 @@
+<resources>
+    <declare-styleable name="MessageView">
+        <attr name="messageContent" format="string" />
+        <attr name="messageTimestamp" format="string"/>
+        <attr name="owner" format="enum" >
+            <enum name="current" value="0"/>
+            <enum name="other" value="1"/>
+        </attr>
+    </declare-styleable>
+</resources>
