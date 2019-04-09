@@ -15,6 +15,7 @@ import io.github.dogganidhal.chatpro.model.User;
 import io.github.dogganidhal.chatpro.ui.fragment.ContactsFragment;
 import io.github.dogganidhal.chatpro.ui.fragment.ContactsFragment.OnContactClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,12 +25,15 @@ import java.util.List;
  */
 public class ContactsViewAdapter extends RecyclerView.Adapter<ContactsViewAdapter.ViewHolder> {
 
-  private final List<User> mContacts;
+  private List<User> mContacts = new ArrayList<>();
   private final OnContactClickListener mListener;
 
-  public ContactsViewAdapter(List<User> items, ContactsFragment.OnContactClickListener listener) {
-    mContacts = items;
+  public ContactsViewAdapter(ContactsFragment.OnContactClickListener listener) {
     mListener = listener;
+  }
+
+  public void setContacts(List<User> contacts) {
+    this.mContacts = contacts;
   }
 
   @NonNull

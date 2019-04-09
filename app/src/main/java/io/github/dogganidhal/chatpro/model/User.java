@@ -2,13 +2,9 @@ package io.github.dogganidhal.chatpro.model;
 
 public class User {
 
+  private String id;
   private String email;
   private String fullName;
-
-  public User(String email, String fullName) {
-    this.email = email;
-    this.fullName = fullName;
-  }
 
   public String getEmail() {
     return email;
@@ -24,5 +20,13 @@ public class User {
 
   public void setFullName(String fullName) {
     this.fullName = fullName;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 }

@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,10 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.Arrays;
+import java.util.List;
 
 import io.github.dogganidhal.chatpro.R;
 import io.github.dogganidhal.chatpro.model.User;
 import io.github.dogganidhal.chatpro.ui.adapter.ContactsViewAdapter;
+import io.github.dogganidhal.chatpro.viewmodel.ContactsViewModel;
 
 /**
  * A fragment representing a list of Items.
@@ -26,6 +30,7 @@ import io.github.dogganidhal.chatpro.ui.adapter.ContactsViewAdapter;
  */
 public class ContactsFragment extends Fragment {
 
+  private ContactsViewModel mViewModel;
   private OnContactClickListener mListener;
 
   /**
@@ -39,16 +44,19 @@ public class ContactsFragment extends Fragment {
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_contact_list, container, false);
+    this.mViewModel = ViewModelProviders.of(this).get(ContactsViewModel.class);
 
     // Set the adapter
     if (view instanceof RecyclerView) {
       Context context = view.getContext();
       RecyclerView recyclerView = (RecyclerView) view;
+      ContactsViewAdapter adapter = new ContactsViewAdapter(mListener);
       recyclerView.setLayoutManager(new LinearLayoutManager(context));
-      recyclerView.setAdapter(new ContactsViewAdapter(Arrays.asList(
-        new User("john.doe@email.com", "John DOE"),
-        new User("david@email.com", "David BECKHAM")
-      ), mListener));
+      this.mViewModel.contacts.observe(this, users -> {
+        adapter.setContacts(users);
+        adapter.notifyDataSetChanged();
+      });
+      recyclerView.setAdapter(adapter);
     }
     return view;
   }
