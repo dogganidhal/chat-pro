@@ -1,12 +1,13 @@
 package io.github.dogganidhal.chatpro.model;
 
 import java.util.List;
+import java.util.Map;
 
 public class Discussion {
 
   private String id;
   private List<Message> messages;
-  private List<DiscussionMember> members;
+  private Map<String, String> members;
 
   public List<Message> getMessages() {
     return messages;
@@ -16,11 +17,11 @@ public class Discussion {
     this.messages = messages;
   }
 
-  public List<DiscussionMember> getMembers() {
+  public Map<String, String> getMembers() {
     return members;
   }
 
-  public void setMembers(List<DiscussionMember> members) {
+  public void setMembers(Map<String, String> members) {
     this.members = members;
   }
 

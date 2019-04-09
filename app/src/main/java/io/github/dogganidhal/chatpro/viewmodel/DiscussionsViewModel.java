@@ -1,11 +1,14 @@
 package io.github.dogganidhal.chatpro.viewmodel;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,7 +25,6 @@ public class DiscussionsViewModel extends ViewModel {
 
   private static String DISCUSSIONS_COLLECTION = "discussions";
   private static String DISCUSSION_MEMBERS_PATH = "members";
-  private static String DISCUSSION_MEMBER_ID_PATH = "id";
 
   private FirebaseAuth mAuth = FirebaseAuth.getInstance();
   private FirebaseFirestore mFireStore = FirebaseFirestore.getInstance();
@@ -31,22 +33,25 @@ public class DiscussionsViewModel extends ViewModel {
 
   DiscussionsViewModel() {
     super();
-    this.mFireStore
-      .collection(DISCUSSIONS_COLLECTION)
-//      .whereEqualTo(FieldPath.of(DISCUSSION_MEMBERS_PATH, DISCUSSION_MEMBER_ID_PATH), this.mAuth.getCurrentUser().getUid())
-      .addSnapshotListener((queryDocumentSnapshots, exception) -> {
-        if (queryDocumentSnapshots != null) {
-          List<Discussion> discussions = queryDocumentSnapshots.getDocuments()
-            .stream()
-            .map(snapshot -> {
-              Discussion discussion = snapshot.toObject(Discussion.class);
-              discussion.setId(snapshot.getId());
-              return discussion;
-            })
-            .collect(Collectors.toList());
-          this.discussions.postValue(discussions);
-        }
-      });
+    FirebaseUser currentUser = this.mAuth.getCurrentUser();
+    if (currentUser != null) {
+      this.mFireStore
+        .collection(DISCUSSIONS_COLLECTION)
+        .whereEqualTo(FieldPath.of(DISCUSSION_MEMBERS_PATH, currentUser.getUid()), currentUser.getDisplayName())
+        .addSnapshotListener((queryDocumentSnapshots, exception) -> {
+          if (queryDocumentSnapshots != null) {
+            List<Discussion> discussions = queryDocumentSnapshots.getDocuments()
+              .stream()
+              .map(snapshot -> {
+                Discussion discussion = snapshot.toObject(Discussion.class);
+                discussion.setId(snapshot.getId());
+                return discussion;
+              })
+              .collect(Collectors.toList());
+            this.discussions.postValue(discussions);
+          }
+        });
+    }
   }
 
   public List<DiscussionViewHolderModel> getDiscussionViewHolderModels() {
@@ -65,18 +70,22 @@ public class DiscussionsViewModel extends ViewModel {
       .collect(Collectors.toList());
   }
 
-  private String buildConversationName(@Nullable List<DiscussionMember> members) {
+  private String buildConversationName(@Nullable Map<String, String> members) {
     if (members == null) {
       return " ";
     }
     return members
+      .keySet()
       .stream()
-      .filter(member -> !member.getId().equals(this.mAuth.getCurrentUser().getUid()))
-      .map(DiscussionMember::getFullName)
+      .filter(memberId -> !memberId.equals(this.mAuth.getCurrentUser().getUid()))
+      .map(members::get)
       .collect(Collectors.joining(", "));
   }
 
   private String extractDiscussionTimestamp(List<Message> messages) {
+    if (messages == null) {
+      return null;
+    }
     Optional<Message> lastMessage = messages
       .stream()
       .min((lhs, rhs) -> lhs.getTimestamp().compareTo(rhs.getTimestamp()));

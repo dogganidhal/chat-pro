@@ -15,6 +15,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -44,6 +45,13 @@ public class AuthViewModel extends ViewModel {
         Map<String, String> userObject = new HashMap<>();
         userObject.put(USER_DOCUMENT_FULL_NAME_KEY, fullName);
         userObject.put(USER_DOCUMENT_EMAIL_KEY, email);
+
+        authResult.getUser()
+          .updateProfile(
+            new UserProfileChangeRequest.Builder()
+            .setDisplayName(fullName)
+            .build()
+          );
 
         this.mFirestore
           .collection(USERS_COLLECTION)
