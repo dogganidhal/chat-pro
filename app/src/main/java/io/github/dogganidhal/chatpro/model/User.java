@@ -2,8 +2,8 @@ package io.github.dogganidhal.chatpro.model;
 
 public class User {
 
-  public String email;
-  public String fullName;
+  private String email;
+  private String fullName;
 
   public User(String email, String fullName) {
     this.email = email;

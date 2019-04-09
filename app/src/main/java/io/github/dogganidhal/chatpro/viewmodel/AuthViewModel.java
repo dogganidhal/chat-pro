@@ -47,7 +47,8 @@ public class AuthViewModel extends ViewModel {
 
         this.mFirestore
           .collection(USERS_COLLECTION)
-          .add(userObject);
+          .document(authResult.getUser().getUid())
+          .set(userObject);
 
       });
   }

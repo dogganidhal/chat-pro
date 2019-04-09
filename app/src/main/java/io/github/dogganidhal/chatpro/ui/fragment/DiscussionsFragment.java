@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,9 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import io.github.dogganidhal.chatpro.R;
-import io.github.dogganidhal.chatpro.model.Discussion;
-import io.github.dogganidhal.chatpro.model.dummy.DummyDiscussions;
+import io.github.dogganidhal.chatpro.model.DiscussionViewHolderModel;
 import io.github.dogganidhal.chatpro.ui.adapter.DiscussionViewAdapter;
+import io.github.dogganidhal.chatpro.viewmodel.DiscussionsViewModel;
 
 /**
  * A fragment representing a list of Items.
@@ -25,6 +26,7 @@ import io.github.dogganidhal.chatpro.ui.adapter.DiscussionViewAdapter;
  */
 public class DiscussionsFragment extends Fragment {
 
+  private DiscussionsViewModel mViewModel;
   private OnDiscussionClickListener mListener;
 
   /**
@@ -37,19 +39,24 @@ public class DiscussionsFragment extends Fragment {
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_discussion_list, container, false);
+    this.mViewModel = ViewModelProviders.of(this).get(DiscussionsViewModel.class);
 
     // Set the adapter
     if (view instanceof RecyclerView) {
       Context context = view.getContext();
       RecyclerView recyclerView = (RecyclerView) view;
+      DiscussionViewAdapter adapter = new DiscussionViewAdapter(mListener);
+
+      this.mViewModel.discussions.observe(this, discussions -> {
+        adapter.setDiscussions(this.mViewModel.getDiscussionViewHolderModels());
+        adapter.notifyDataSetChanged();
+      });
 
       recyclerView.setLayoutManager(new LinearLayoutManager(context));
-      // TODO: Set a proper data source
-      recyclerView.setAdapter(new DiscussionViewAdapter(DummyDiscussions.ITEMS, mListener));
+      recyclerView.setAdapter(adapter);
     }
     return view;
   }
-
 
   @Override
   public void onAttach(@NonNull Context context) {
@@ -80,6 +87,6 @@ public class DiscussionsFragment extends Fragment {
    */
   public interface OnDiscussionClickListener {
     // TODO: Update argument type and name
-    void onDiscussionViewClicked(Discussion discussion);
+    void onDiscussionViewClicked(DiscussionViewHolderModel discussion);
   }
 }

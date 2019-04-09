@@ -12,10 +12,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.dogganidhal.chatpro.R;
 import io.github.dogganidhal.chatpro.model.Discussion;
+import io.github.dogganidhal.chatpro.model.DiscussionViewHolderModel;
 import io.github.dogganidhal.chatpro.model.Message;
 import io.github.dogganidhal.chatpro.ui.fragment.DiscussionsFragment.OnDiscussionClickListener;
 import io.github.dogganidhal.chatpro.utils.DateUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,11 +27,10 @@ import java.util.Optional;
  */
 public class DiscussionViewAdapter extends RecyclerView.Adapter<DiscussionViewAdapter.ViewHolder> {
 
-  private final List<Discussion> mDiscussions;
+  private List<DiscussionViewHolderModel> mDiscussions = new ArrayList<>();
   private final OnDiscussionClickListener mListener;
 
-  public DiscussionViewAdapter(List<Discussion> items, OnDiscussionClickListener listener) {
-    this.mDiscussions = items;
+  public DiscussionViewAdapter(OnDiscussionClickListener listener) {
     this.mListener = listener;
   }
 
@@ -43,7 +44,7 @@ public class DiscussionViewAdapter extends RecyclerView.Adapter<DiscussionViewAd
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-    final Discussion discussion = this.mDiscussions.get(position);
+    DiscussionViewHolderModel discussion = this.mDiscussions.get(position);
     holder.setDiscussion(discussion);
     holder.setOnClickListener(view -> {
       if (mListener != null) {
@@ -55,6 +56,10 @@ public class DiscussionViewAdapter extends RecyclerView.Adapter<DiscussionViewAd
   @Override
   public int getItemCount() {
     return this.mDiscussions.size();
+  }
+
+  public void setDiscussions(List<DiscussionViewHolderModel> discussions) {
+    this.mDiscussions = discussions;
   }
 
   class ViewHolder extends RecyclerView.ViewHolder {
@@ -72,26 +77,17 @@ public class DiscussionViewAdapter extends RecyclerView.Adapter<DiscussionViewAd
     TextView mDiscussionLastMessageDateTextView;
 
     private View mView;
-    private View.OnClickListener mOnClickListener;
 
     void setOnClickListener(View.OnClickListener onClickListener) {
-      this.mOnClickListener = onClickListener;
+      this.mView.setOnClickListener(onClickListener);
     }
 
-    void setDiscussion(Discussion discussion) {
-      // TODO: properly compute title and last message
-      String discussionTitle = discussion.users.stream().findFirst().get().fullName;
-      Optional<Message> lastMessage = discussion.messages
-        .stream()
-        .reduce((lhs, rhs) -> lhs.timestamp.compareTo(rhs.timestamp) > 0 ? lhs : rhs);
+    void setDiscussion(DiscussionViewHolderModel discussionViewHolderModel) {
 
-      this.mMemberInitialTextView.setText(discussion.users.stream().findFirst().get().fullName.substring(0, 1));
-      this.mDiscussionLastMessageAuthorTextView.setText(discussionTitle);
-
-      if (lastMessage.isPresent()) {
-        this.mDiscussionLastMessageDateTextView.setText(DateUtils.formatDiscussionTimestamp(lastMessage.get().timestamp));
-        this.mDiscussionLastMessageContentTextView.setText(lastMessage.get().content);
-      }
+      this.mMemberInitialTextView.setText(discussionViewHolderModel.getDiscussionMembersInitial());
+      this.mDiscussionLastMessageAuthorTextView.setText(discussionViewHolderModel.getDiscussionTitle());
+      this.mDiscussionLastMessageDateTextView.setText(discussionViewHolderModel.getFormattedDiscussionTimestamp());
+      this.mDiscussionLastMessageContentTextView.setText(discussionViewHolderModel.getLastMessageContent());
 
     }
 
@@ -99,7 +95,6 @@ public class DiscussionViewAdapter extends RecyclerView.Adapter<DiscussionViewAd
       super(view);
       this.mView = view;
       ButterKnife.bind(this, this.mView);
-      this.mView.setOnClickListener(this.mOnClickListener);
     }
   }
 }

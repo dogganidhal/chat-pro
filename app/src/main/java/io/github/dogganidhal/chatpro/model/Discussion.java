@@ -4,13 +4,9 @@ import java.util.List;
 
 public class Discussion {
 
-  public List<Message> messages;
-  public List<User> users;
-
-  public Discussion(List<Message> messages, List<User> users) {
-    this.messages = messages;
-    this.users = users;
-  }
+  private String id;
+  private List<Message> messages;
+  private List<DiscussionMember> members;
 
   public List<Message> getMessages() {
     return messages;
@@ -20,11 +16,19 @@ public class Discussion {
     this.messages = messages;
   }
 
-  public List<User> getUsers() {
-    return users;
+  public List<DiscussionMember> getMembers() {
+    return members;
   }
 
-  public void setUsers(List<User> users) {
-    this.users = users;
+  public void setMembers(List<DiscussionMember> members) {
+    this.members = members;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 }

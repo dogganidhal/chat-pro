@@ -4,12 +4,16 @@ import com.google.firebase.Timestamp;
 
 public class Message {
 
-  public String authorId;
-  public String content;
-  public String discussionId;
-  public String mediaUrl;
-  public String messageType;
-  public Timestamp timestamp;
+  private String authorId;
+  private String content;
+  private String discussionId;
+  private String mediaUrl;
+  private String messageType;
+  private Timestamp timestamp;
+
+  public Message() {
+
+  }
 
   public Message(String authorId, String content, String discussionId, String mediaUrl, String messageType, Timestamp timestamp) {
     this.authorId = authorId;

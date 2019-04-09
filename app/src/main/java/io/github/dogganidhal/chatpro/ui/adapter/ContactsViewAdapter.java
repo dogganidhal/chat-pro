@@ -71,8 +71,8 @@ public class ContactsViewAdapter extends RecyclerView.Adapter<ContactsViewAdapte
 
     void setContact(User contact) {
       this.mContact = contact;
-      this.mContactNameTextView.setText(contact.fullName);
-      this.mContactInitialTextView.setText(contact.fullName.substring(0, 1));
+      this.mContactNameTextView.setText(contact.getFullName());
+      this.mContactInitialTextView.setText(contact.getFullName().substring(0, 1));
     }
 
     ViewHolder(View view) {

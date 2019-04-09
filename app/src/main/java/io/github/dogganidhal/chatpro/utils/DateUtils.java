@@ -16,9 +16,9 @@ public abstract class DateUtils {
 
     if (diff < 0) {
       throw new IllegalArgumentException("Can't format timestamp in the future");
-    } else if (diff < 24 * 3600) {
+    } else if (diff < 24 * 3600 * 1000) {
       dateFormat = "HH:mm";
-    } else if (diff < 7 * 24 * 3600) {
+    } else if (diff < 7 * 24 * 3600 * 1000) {
       dateFormat = "EEE";
     } else {
       dateFormat = "MMM d";

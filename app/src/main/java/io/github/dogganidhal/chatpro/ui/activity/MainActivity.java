@@ -10,6 +10,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.dogganidhal.chatpro.R;
 import io.github.dogganidhal.chatpro.model.Discussion;
+import io.github.dogganidhal.chatpro.model.DiscussionViewHolderModel;
 import io.github.dogganidhal.chatpro.model.User;
 import io.github.dogganidhal.chatpro.ui.fragment.ContactsFragment;
 import io.github.dogganidhal.chatpro.ui.fragment.DiscussionsFragment;
@@ -100,8 +101,8 @@ public class MainActivity extends BaseActivity
   }
 
   @Override
-  public void onDiscussionViewClicked(Discussion discussion) {
-    System.out.println(discussion);
+  public void onDiscussionViewClicked(DiscussionViewHolderModel discussion) {
+    System.out.println(discussion.getDiscussionId());
   }
 
   @Override
