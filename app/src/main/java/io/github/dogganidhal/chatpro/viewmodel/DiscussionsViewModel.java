@@ -6,7 +6,6 @@ import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -16,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import io.github.dogganidhal.chatpro.model.Discussion;
-import io.github.dogganidhal.chatpro.model.DiscussionMember;
 import io.github.dogganidhal.chatpro.model.DiscussionViewHolderModel;
 import io.github.dogganidhal.chatpro.model.Message;
 import io.github.dogganidhal.chatpro.utils.DateUtils;
@@ -47,6 +45,7 @@ public class DiscussionsViewModel extends ViewModel {
                 discussion.setId(snapshot.getId());
                 return discussion;
               })
+              .sorted((lhs, rhs) -> -lhs.getLastMessage().getTimestamp().compareTo(rhs.getLastMessage().getTimestamp()))
               .collect(Collectors.toList());
             this.discussions.postValue(discussions);
           }
@@ -60,12 +59,13 @@ public class DiscussionsViewModel extends ViewModel {
     }
     return this.discussions.getValue()
       .stream()
+      .filter(discussion -> discussion.getLastMessage() != null)
       .map(discussion -> new DiscussionViewHolderModel(
         discussion.getId(),
         this.buildConversationName(discussion.getMembers()),
-        this.extractDiscussionTimestamp(discussion.getMessages()),
+        DateUtils.formatDiscussionTimestamp(discussion.getLastMessage().getTimestamp()),
         this.buildConversationName(discussion.getMembers()).substring(0, 1),
-        this.extractLastMessageContent(discussion.getMessages())
+        discussion.getLastMessage().getContent()
       ))
       .collect(Collectors.toList());
   }
@@ -80,24 +80,6 @@ public class DiscussionsViewModel extends ViewModel {
       .filter(memberId -> !memberId.equals(this.mAuth.getCurrentUser().getUid()))
       .map(members::get)
       .collect(Collectors.joining(", "));
-  }
-
-  private String extractDiscussionTimestamp(List<Message> messages) {
-    if (messages == null) {
-      return null;
-    }
-    Optional<Message> lastMessage = messages
-      .stream()
-      .min((lhs, rhs) -> lhs.getTimestamp().compareTo(rhs.getTimestamp()));
-    return lastMessage.map(message -> DateUtils.formatDiscussionTimestamp(message.getTimestamp()))
-      .orElse(null);
-  }
-
-  private String extractLastMessageContent(List<Message> messages) {
-    Optional<Message> lastMessage = messages
-      .stream()
-      .min((lhs, rhs) -> lhs.getTimestamp().compareTo(rhs.getTimestamp()));
-    return lastMessage.map(Message::getContent).orElse(null);
   }
 
 }

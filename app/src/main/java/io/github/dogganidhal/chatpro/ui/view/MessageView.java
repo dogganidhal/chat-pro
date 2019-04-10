@@ -90,11 +90,16 @@ public class MessageView extends FrameLayout {
     this.mMessageContentTextView.setTextColor(this.getResources().getColor(textColor));
     this.mMessageContentTextView.setText(this.mMessageContent);
 
-    int gravity = this.mMessageOwner.equals(MESSAGE_OWNER_CURRENT) ?
-            Gravity.END :
-            Gravity.START;
+    int contentViewGravity = this.mMessageOwner.equals(MESSAGE_OWNER_CURRENT) ?
+      Gravity.END :
+      Gravity.START;
 
-    this.mContentView.setGravity(gravity);
+    int messageContentGravity = this.mMessageOwner.equals(MESSAGE_OWNER_CURRENT) ?
+            Gravity.START :
+            Gravity.END;
+
+    this.mContentView.setGravity(contentViewGravity);
+    this.mMessageContentTextView.setGravity(messageContentGravity);
 
     if (this.mAuthorName != null && this.mMessageOwner.equals(MESSAGE_OWNER_OTHER)) {
       this.mAuthorTextView.setText(this.mAuthorName);

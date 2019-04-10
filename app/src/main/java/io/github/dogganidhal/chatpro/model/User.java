@@ -6,6 +6,21 @@ public class User {
   private String email;
   private String fullName;
 
+  public User() {
+
+  }
+
+  public User(String id, String fullName) {
+    this.id = id;
+    this.fullName = fullName;
+  }
+
+  public User(String id, String email, String fullName) {
+    this.id = id;
+    this.email = email;
+    this.fullName = fullName;
+  }
+
   public String getEmail() {
     return email;
   }

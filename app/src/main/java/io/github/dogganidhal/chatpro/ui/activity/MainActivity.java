@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.dogganidhal.chatpro.R;
@@ -16,6 +18,7 @@ import io.github.dogganidhal.chatpro.model.User;
 import io.github.dogganidhal.chatpro.ui.fragment.ContactsFragment;
 import io.github.dogganidhal.chatpro.ui.fragment.DiscussionsFragment;
 import io.github.dogganidhal.chatpro.ui.fragment.SettingsFragment;
+import io.github.dogganidhal.chatpro.viewmodel.MainViewModel;
 
 import android.view.MenuItem;
 
@@ -24,6 +27,7 @@ public class MainActivity extends BaseActivity
   DiscussionsFragment.OnDiscussionClickListener,
     ContactsFragment.OnContactClickListener {
 
+  private MainViewModel mViewModel;
   private DiscussionsFragment mDiscussionFragment;
   private ContactsFragment mContactsFragment;
   private SettingsFragment mSettingsFragment;
@@ -36,6 +40,7 @@ public class MainActivity extends BaseActivity
     super.onCreate(savedInstanceState);
     this.setContentView(R.layout.activity_main);
     ButterKnife.bind(this);
+    this.mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
     this.setup();
   }
 
@@ -104,12 +109,16 @@ public class MainActivity extends BaseActivity
   @Override
   public void onDiscussionViewClicked(DiscussionViewHolderModel discussion) {
     System.out.println(discussion.getDiscussionId());
-    Intent intent = ChatActivity.getStartingIntentFromDiscussion(this, discussion.getDiscussionId());
+    Intent intent = ChatActivity.getStartingIntentFromDiscussion(this, discussion.getDiscussionId(), discussion.getDiscussionTitle());
     this.startActivity(intent);
   }
 
   @Override
   public void onContactViewClicked(User contact) {
     System.out.println(contact);
+    this.mViewModel.createDiscussionIfNeeded(contact, discussion -> {
+      Intent intent = ChatActivity.getStartingIntentFromDiscussion(this, discussion.getDiscussionId(), discussion.getDiscussionTitle());
+      this.startActivity(intent);
+    });
   }
 }

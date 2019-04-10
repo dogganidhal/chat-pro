@@ -26,14 +26,14 @@
 
         <LinearLayout
             android:id="@+id/message_view_holder"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
             android:padding="16dp"
             android:background="@drawable/current_user_message_view_background">
 
             <TextView
                 android:id="@+id/message_view_content_text_view"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textColor="@color/white"
                 android:textSize="16sp"
