@@ -1,5 +1,6 @@
 package io.github.dogganidhal.chatpro.ui.activity;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -103,6 +104,8 @@ public class MainActivity extends BaseActivity
   @Override
   public void onDiscussionViewClicked(DiscussionViewHolderModel discussion) {
     System.out.println(discussion.getDiscussionId());
+    Intent intent = ChatActivity.getStartingIntentFromDiscussion(this, discussion.getDiscussionId());
+    this.startActivity(intent);
   }
 
   @Override

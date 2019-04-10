@@ -28,8 +28,6 @@ public class MessageView extends FrameLayout {
   private String mMessageTimeStamp = "";
   private String mMessageOwner = MESSAGE_OWNER_CURRENT;
 
-  private Unbinder mUnBinder;
-
   @BindView(R.id.message_view_holder)
   View mMessageContentHolderView;
 
@@ -44,17 +42,17 @@ public class MessageView extends FrameLayout {
 
   public MessageView(Context context) {
     super(context);
-    init(context, null, 0);
+    this.init(context, null, 0);
   }
 
   public MessageView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    init(context, attrs, 0);
+    this.init(context, attrs, 0);
   }
 
   public MessageView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
-    init(context, attrs, defStyle);
+    this.init(context, attrs, defStyle);
   }
 
   private void init(Context context, AttributeSet attrs, int defStyle) {
@@ -64,24 +62,20 @@ public class MessageView extends FrameLayout {
 
     this.mMessageContent = attributes.getString(R.styleable.MessageView_messageContent);
     this.mMessageTimeStamp = attributes.getString(R.styleable.MessageView_messageTimestamp);
-    this.mMessageOwner = attributes.getString(R.styleable.MessageView_owner);
     this.mAuthorName = attributes.getString(R.styleable.MessageView_messageAuthorName);
+    if (attributes.getString(R.styleable.MessageView_owner) != null) {
+      this.mMessageOwner = attributes.getString(R.styleable.MessageView_owner);
+    }
 
     attributes.recycle();
 
     View contentView = LayoutInflater.from(context).inflate(R.layout.view_message, null);
     this.addView(contentView);
 
-    this.mUnBinder = ButterKnife.bind(this);
+    ButterKnife.bind(this);
 
     this.resetViewContent();
 
-  }
-
-  @Override
-  protected void onDetachedFromWindow() {
-    super.onDetachedFromWindow();
-    this.mUnBinder.unbind();
   }
 
   private void resetViewContent() {

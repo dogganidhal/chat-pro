@@ -1,23 +1,23 @@
 package io.github.dogganidhal.chatpro.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.github.dogganidhal.chatpro.R;
-import io.github.dogganidhal.chatpro.model.ChatMessageViewHolderModel;
 import io.github.dogganidhal.chatpro.ui.adapter.ChatAdapter;
 import io.github.dogganidhal.chatpro.viewmodel.ChatViewModel;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends BaseActivity {
+
+  private static final String DISCUSSION_ID_EXTRA_KEY = "discussionId";
 
   private ChatViewModel mViewModel;
 
@@ -27,6 +27,12 @@ public class ChatActivity extends AppCompatActivity {
   @BindView(R.id.chat_recycler_view)
   RecyclerView mRecyclerView;
 
+  public static Intent getStartingIntentFromDiscussion(Context context, String discussionId) {
+    Intent intent = new Intent(context, ChatActivity.class);
+    intent.putExtra(DISCUSSION_ID_EXTRA_KEY, discussionId);
+    return intent;
+  }
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -34,7 +40,9 @@ public class ChatActivity extends AppCompatActivity {
 
     ButterKnife.bind(this);
 
-    this.mViewModel = new ChatViewModel("lpqWUkD3Ngv2qj0fKqru");
+    String discussionId = this.getIntent().getStringExtra(DISCUSSION_ID_EXTRA_KEY);
+
+    this.mViewModel = new ChatViewModel(discussionId);
     ChatAdapter adapter = new ChatAdapter();
 
     this.mViewModel.messages.observe(this, messages -> {
@@ -42,7 +50,15 @@ public class ChatActivity extends AppCompatActivity {
       adapter.notifyDataSetChanged();
     });
 
+    LinearLayoutManager manager = new LinearLayoutManager(this);
+    manager.setReverseLayout(true);
+    this.mRecyclerView.setLayoutManager(manager);
     this.mRecyclerView.setAdapter(adapter);
+  }
+
+  @Override
+  public void onBackPressed() {
+    super.onBackPressed();
   }
 
   @OnClick(R.id.chat_attach_button)

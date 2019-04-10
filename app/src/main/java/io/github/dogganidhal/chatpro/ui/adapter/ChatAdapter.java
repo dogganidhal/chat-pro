@@ -1,7 +1,5 @@
 package io.github.dogganidhal.chatpro.ui.adapter;
 
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
@@ -9,7 +7,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import io.github.dogganidhal.chatpro.R;
 import io.github.dogganidhal.chatpro.model.ChatMessageViewHolderModel;
 import io.github.dogganidhal.chatpro.ui.view.MessageView;
 
@@ -19,8 +16,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
   @NonNull
   @Override
-  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    return new ViewHolder(parent);
+  public ChatAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    MessageView view = new MessageView(parent.getContext());
+    return new ChatAdapter.ViewHolder(view);
   }
 
   @Override
@@ -47,11 +45,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
       this.mMessageView.setMessageContent(message.getContent());
     }
 
-    ViewHolder(@NonNull ViewGroup itemView) {
+    ViewHolder(@NonNull MessageView itemView) {
       super(itemView);
-      this.mMessageView = (MessageView) LayoutInflater.from(itemView.getContext()).inflate(R.layout.view_message, itemView);
-      ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-      itemView.addView(this.mMessageView, params);
+      this.mMessageView = itemView;
     }
 
   }
