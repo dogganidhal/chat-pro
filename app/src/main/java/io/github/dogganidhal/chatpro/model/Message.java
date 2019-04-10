@@ -4,7 +4,7 @@ import com.google.firebase.Timestamp;
 
 public class Message {
 
-  private String authorId;
+  private User author;
   private String content;
   private String discussionId;
   private String mediaUrl;
@@ -15,8 +15,8 @@ public class Message {
 
   }
 
-  public Message(String authorId, String content, String discussionId, String mediaUrl, String messageType, Timestamp timestamp) {
-    this.authorId = authorId;
+  public Message(User author, String content, String discussionId, String mediaUrl, String messageType, Timestamp timestamp) {
+    this.author = author;
     this.content = content;
     this.discussionId = discussionId;
     this.mediaUrl = mediaUrl;
@@ -24,12 +24,12 @@ public class Message {
     this.timestamp = timestamp;
   }
 
-  public String getAuthorId() {
-    return authorId;
+  public User getAuthor() {
+    return author;
   }
 
-  public void setAuthorId(String authorId) {
-    this.authorId = authorId;
+  public void setAuthor(User author) {
+    this.author = author;
   }
 
   public String getContent() {

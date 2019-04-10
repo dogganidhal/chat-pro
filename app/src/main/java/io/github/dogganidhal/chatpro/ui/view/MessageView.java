@@ -2,6 +2,7 @@ package io.github.dogganidhal.chatpro.ui.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,8 +20,8 @@ import io.github.dogganidhal.chatpro.R;
 
 public class MessageView extends FrameLayout {
 
-  static final String MESSAGE_OWNER_CURRENT = "0";
-  static final String MESSAGE_OWNER_OTHER = "1";
+  public static final String MESSAGE_OWNER_CURRENT = "0";
+  public static final String MESSAGE_OWNER_OTHER = "1";
 
   private String mAuthorName = null;
   private String mMessageContent = "";
@@ -73,10 +74,22 @@ public class MessageView extends FrameLayout {
 
     this.mUnBinder = ButterKnife.bind(this);
 
+    this.resetViewContent();
+
+  }
+
+  @Override
+  protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
+    this.mUnBinder.unbind();
+  }
+
+  private void resetViewContent() {
+
     int background = this.mMessageOwner.equals(MESSAGE_OWNER_CURRENT) ?
       R.drawable.current_user_message_view_background :
       R.drawable.message_input_view_background;
-    this.mMessageContentHolderView.setBackground(ContextCompat.getDrawable(context, background));
+    this.mMessageContentHolderView.setBackground(ContextCompat.getDrawable(this.getContext(), background));
     int textColor = this.mMessageOwner.equals(MESSAGE_OWNER_CURRENT) ?
       R.color.white :
       R.color.textBlack;
@@ -84,8 +97,8 @@ public class MessageView extends FrameLayout {
     this.mMessageContentTextView.setText(this.mMessageContent);
 
     int gravity = this.mMessageOwner.equals(MESSAGE_OWNER_CURRENT) ?
-      Gravity.END :
-      Gravity.START;
+            Gravity.END :
+            Gravity.START;
 
     this.mContentView.setGravity(gravity);
 
@@ -97,18 +110,13 @@ public class MessageView extends FrameLayout {
 
   }
 
-  @Override
-  protected void onDetachedFromWindow() {
-    super.onDetachedFromWindow();
-    this.mUnBinder.unbind();
-  }
-
   public String getMessageContent() {
     return mMessageContent;
   }
 
   public void setMessageContent(String messageContent) {
     this.mMessageContent = messageContent;
+    this.resetViewContent();
   }
 
   public String getMessageTimeStamp() {
@@ -117,6 +125,7 @@ public class MessageView extends FrameLayout {
 
   public void setMessageTimeStamp(String messageTimeStamp) {
     this.mMessageTimeStamp = messageTimeStamp;
+    this.resetViewContent();
   }
 
   public String getMessageOwner() {
@@ -125,6 +134,7 @@ public class MessageView extends FrameLayout {
 
   public void setMessageOwner(String messageOwner) {
     this.mMessageOwner = messageOwner;
+    this.resetViewContent();
   }
 
   public String getAuthorName() {
@@ -133,5 +143,6 @@ public class MessageView extends FrameLayout {
 
   public void setAuthorName(String authorName) {
     this.mAuthorName = authorName;
+    this.resetViewContent();
   }
 }
