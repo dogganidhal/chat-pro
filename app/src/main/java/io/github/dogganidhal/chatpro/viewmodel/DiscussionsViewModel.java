@@ -48,6 +48,7 @@ public class DiscussionsViewModel extends ViewModel {
                 discussion.setId(snapshot.getId());
                 return discussion;
               })
+              .filter(discussion -> discussion.getLastMessage() != null)
               .sorted((lhs, rhs) -> -lhs.getLastMessage().getTimestamp().compareTo(rhs.getLastMessage().getTimestamp()))
               .collect(Collectors.toList());
             this.discussions.postValue(discussions);

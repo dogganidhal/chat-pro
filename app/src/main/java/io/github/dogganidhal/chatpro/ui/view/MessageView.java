@@ -109,7 +109,7 @@ public class MessageView extends FrameLayout {
     this.mMessageBubbleView.setGravity(contentViewGravity);
 
     if (this.mAuthorName != null && this.mMessageOwner.equals(MESSAGE_OWNER_OTHER)) {
-//      this.mAuthorTextView.setVisibility(View.VISIBLE);
+      this.mAuthorTextView.setVisibility(View.VISIBLE);
       this.mAuthorTextView.setText(this.mAuthorName);
     } else {
       this.mAuthorTextView.setVisibility(View.GONE);
