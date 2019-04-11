@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,6 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.github.dogganidhal.chatpro.R;
 import io.github.dogganidhal.chatpro.model.DiscussionViewHolderModel;
 import io.github.dogganidhal.chatpro.ui.adapter.DiscussionViewAdapter;
@@ -29,6 +33,9 @@ public class DiscussionsFragment extends Fragment {
   private DiscussionsViewModel mViewModel;
   private OnDiscussionClickListener mListener;
 
+  @BindView(R.id.discussions_recycler_view)
+  RecyclerView mRecyclerView;
+
   /**
    * Mandatory empty constructor for the fragment manager to instantiate the
    * fragment (e.g. upon screen orientation changes).
@@ -39,23 +46,23 @@ public class DiscussionsFragment extends Fragment {
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_discussion_list, container, false);
-    this.mViewModel = ViewModelProviders.of(this).get(DiscussionsViewModel.class);
-
-    // Set the adapter
-    if (view instanceof RecyclerView) {
-      Context context = view.getContext();
-      RecyclerView recyclerView = (RecyclerView) view;
-      DiscussionViewAdapter adapter = new DiscussionViewAdapter(mListener);
-
-      this.mViewModel.discussions.observe(this, discussions -> {
-        adapter.setDiscussions(this.mViewModel.getDiscussionViewHolderModels());
-        adapter.notifyDataSetChanged();
-      });
-
-      recyclerView.setLayoutManager(new LinearLayoutManager(context));
-      recyclerView.setAdapter(adapter);
-    }
+    ButterKnife.bind(this, view);
     return view;
+  }
+
+  @Override
+  public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    this.mViewModel = ViewModelProviders.of(this).get(DiscussionsViewModel.class);
+    DiscussionViewAdapter adapter = new DiscussionViewAdapter(mListener);
+
+    this.mViewModel.discussions.observe(this, discussions -> {
+      adapter.setDiscussions(this.mViewModel.getDiscussionViewHolderModels());
+      adapter.notifyDataSetChanged();
+    });
+
+    this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+    this.mRecyclerView.setAdapter(adapter);
   }
 
   @Override
@@ -73,6 +80,11 @@ public class DiscussionsFragment extends Fragment {
   public void onDetach() {
     super.onDetach();
     mListener = null;
+  }
+
+  @OnClick(R.id.create_group_button)
+  void onCreateGroupButtonClicked() {
+
   }
 
   /**

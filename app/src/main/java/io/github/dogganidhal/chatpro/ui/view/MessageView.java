@@ -2,7 +2,6 @@ package io.github.dogganidhal.chatpro.ui.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.dogganidhal.chatpro.R;
-import io.github.dogganidhal.chatpro.utils.RoundTransform;
 
 
 public class MessageView extends FrameLayout {
@@ -123,8 +121,7 @@ public class MessageView extends FrameLayout {
       this.mImageView.setVisibility(View.VISIBLE);
       this.mMessageContentHolderView.setPadding(0, 0, 0, 0);
       this.mMessageContentHolderView.invalidate();
-//      this.mMessageContentHolderView.setBackgroundColor(Color.TRANSPARENT);
-      Picasso.get().load(this.mMediaUrl).transform(new RoundTransform(16)).into(this.mImageView);
+      Picasso.get().load(this.mMediaUrl).into(this.mImageView);
     }
     // TODO: Do the same with document and video
 
