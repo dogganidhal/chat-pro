@@ -1,13 +1,23 @@
 package io.github.dogganidhal.chatpro.viewmodel;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import androidx.annotation.Nullable;
@@ -15,6 +25,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import io.github.dogganidhal.chatpro.model.Discussion;
 import io.github.dogganidhal.chatpro.model.DiscussionViewHolderModel;
+import io.github.dogganidhal.chatpro.model.User;
 import io.github.dogganidhal.chatpro.utils.DateUtils;
 
 public class DiscussionsViewModel extends ViewModel {
@@ -24,6 +35,7 @@ public class DiscussionsViewModel extends ViewModel {
   private static final String MESSAGE_TYPE_VIDEO = "video";
   private static final String MESSAGE_TYPE_DOCUMENT = "document";
 
+  private static final String USERS_COLLECTION = "users";
   private static final String DISCUSSIONS_COLLECTION = "discussions";
   private static final String DISCUSSION_MEMBERS_PATH = "members";
 
@@ -74,6 +86,40 @@ public class DiscussionsViewModel extends ViewModel {
       .collect(Collectors.toList());
   }
 
+  public Task<List<User>> getContacts() {
+    return this.mFireStore.collection(USERS_COLLECTION)
+      .get()
+      .continueWith(task -> {
+        if (!task.isSuccessful() || task.getResult() == null) {
+          throw new RuntimeException();
+        }
+        return task.getResult().toObjects(User.class);
+      });
+  }
+
+  public Task<DiscussionViewHolderModel> createGroupDiscussion(List<User> contacts) {
+    Map<String, String> members = contacts
+      .stream()
+      .map(member -> new AbstractMap.SimpleEntry<>(member.getId(), member.getFullName()))
+      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    Discussion discussion = new Discussion(members);
+    return this.mFireStore.collection(DISCUSSIONS_COLLECTION)
+      .add(discussion)
+      .continueWith(task -> {
+        if (!task.isSuccessful() || task.getResult() == null) {
+          throw new RuntimeException();
+        }
+        discussion.setId(task.getResult().getId());
+        return new DiscussionViewHolderModel(
+          discussion.getId(),
+          this.buildConversationName(discussion.getMembers()),
+          DateUtils.formatDiscussionTimestamp(discussion.getLastMessage().getTimestamp()),
+          this.buildConversationName(discussion.getMembers()).substring(0, 1),
+          this.extractLastMessageContent(discussion)
+        );
+      });
+  }
+
   private String buildConversationName(@Nullable Map<String, String> members) {
     if (members == null) {
       return " ";
@@ -101,5 +147,4 @@ public class DiscussionsViewModel extends ViewModel {
     }
     return null;
   }
-
 }

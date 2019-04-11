@@ -1,6 +1,7 @@
 package io.github.dogganidhal.chatpro.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.github.dogganidhal.chatpro.R;
 import io.github.dogganidhal.chatpro.model.DiscussionViewHolderModel;
+import io.github.dogganidhal.chatpro.ui.activity.ChatActivity;
+import io.github.dogganidhal.chatpro.ui.view.DiscussionGroupDialog;
 import io.github.dogganidhal.chatpro.ui.adapter.DiscussionViewAdapter;
 import io.github.dogganidhal.chatpro.viewmodel.DiscussionsViewModel;
 
@@ -29,6 +32,8 @@ import io.github.dogganidhal.chatpro.viewmodel.DiscussionsViewModel;
  * interface.
  */
 public class DiscussionsFragment extends Fragment {
+
+  private static final int SELECT_GROUP_MEMBERS_REQUEST_CODE = 0xFF;
 
   private DiscussionsViewModel mViewModel;
   private OnDiscussionClickListener mListener;
@@ -84,7 +89,18 @@ public class DiscussionsFragment extends Fragment {
 
   @OnClick(R.id.create_group_button)
   void onCreateGroupButtonClicked() {
-
+    this.mViewModel.getContacts()
+      .addOnSuccessListener(users -> {
+        DiscussionGroupDialog dialog = new DiscussionGroupDialog(this.getContext(), this.getActivity(), users);
+        dialog.setmOnGroupMembersConfirmed(contacts ->
+          this.mViewModel.createGroupDiscussion(contacts)
+            .addOnSuccessListener(discussion -> {
+              Intent intent = ChatActivity.getStartingIntentFromDiscussion(this.getContext(), discussion.getDiscussionId(), discussion.getDiscussionTitle());
+              this.getActivity().startActivity(intent);
+            })
+        );
+        dialog.show();
+      });
   }
 
   /**

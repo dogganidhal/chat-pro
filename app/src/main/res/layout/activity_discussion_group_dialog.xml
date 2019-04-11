@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ui.view.DiscussionGroupDialog"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CREER UN GROUPE"
+        android:textColor="@color/textBlack"
+        android:inputType="textCapCharacters"
+        android:textSize="20sp"
+        android:fontFamily="@font/roboto_medium"
+        android:textAlignment="center"
+        android:layout_margin="16dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lineGray"/>
+
+    <AutoCompleteTextView
+        android:id="@+id/group_member_search_text_input"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/message_input_view_background"
+        android:paddingLeft="16dp"
+        android:paddingEnd="16dp"
+        android:textCursorDrawable="@null"
+        android:hint="Chercher un utilisateur"/>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/group_members_chip_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lineGray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/group_members_confirm_group_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:text="ABANDONNER"
+            android:backgroundTint="@android:color/transparent"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:textColor="@color/darkGray"
+            app:rippleColor="@color/pink"/>
+
+        <Button
+            android:id="@+id/group_members_cancel_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:text="CONFIRMER"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:textColor="@color/pink"
+            android:backgroundTint="@android:color/transparent"
+            app:rippleColor="@color/darkGray"/>
+
+    </LinearLayout>
+
+</LinearLayout>
