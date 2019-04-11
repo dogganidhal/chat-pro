@@ -5,6 +5,9 @@
     package="io.github.dogganidhal.chatpro">
 
     <dist:module dist:instant="true" />
+    <uses-permission android:name="WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"

@@ -18,6 +18,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
   @Override
   public ChatAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     MessageView view = new MessageView(parent.getContext());
+    RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+    view.setLayoutParams(lp);
     return new ChatAdapter.ViewHolder(view);
   }
 
@@ -43,6 +45,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
       this.mMessageView.setMessageOwner(message.getCurrentUserIsAuthor() ? MessageView.MESSAGE_OWNER_CURRENT : MessageView.MESSAGE_OWNER_OTHER);
       this.mMessageView.setAuthorName(message.getAuthorName());
       this.mMessageView.setMessageContent(message.getContent());
+      this.mMessageView.setMediaUrl(message.getMediaUrl());
+      this.mMessageView.setMessageType(message.getMessageType());
     }
 
     ViewHolder(@NonNull MessageView itemView) {

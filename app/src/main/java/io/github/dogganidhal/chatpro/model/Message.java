@@ -4,6 +4,11 @@ import com.google.firebase.Timestamp;
 
 public class Message {
 
+  public static final String MESSAGE_TYPE_TEXT = "text";
+  public static final String MESSAGE_TYPE_IMAGE = "image";
+  public static final String MESSAGE_TYPE_VIDEO = "video";
+  public static final String MESSAGE_TYPE_DOCUMENT = "document";
+
   private User author;
   private String content;
   private String discussionId;

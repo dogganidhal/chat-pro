@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/attachment_menu_gallery" android:title="@string/gallery" android:icon="@drawable/ic_photo_library_black_24dp"/>
+    <item android:id="@+id/attachment_menu_camera" android:title="@string/photo" android:icon="@drawable/ic_camera_alt_black_24dp"/>
+    <item android:id="@+id/attachment_menu_document" android:title="@string/document" android:icon="@drawable/ic_picture_as_pdf_black_24dp"/>
+    <item android:id="@+id/attachment_menu_video" android:title="@string/video" android:icon="@drawable/ic_video_library_black_24dp"/>
+</menu>

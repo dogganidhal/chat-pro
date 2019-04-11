@@ -2,34 +2,42 @@ package io.github.dogganidhal.chatpro.ui.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.github.dogganidhal.chatpro.R;
 
 public class MessageView extends FrameLayout {
+
+  public static final String MESSAGE_TYPE_TEXT = "text";
+  public static final String MESSAGE_TYPE_VIDEO = "video";
+  public static final String MESSAGE_TYPE_IMAGE = "photo";
 
   public static final String MESSAGE_OWNER_CURRENT = "0";
   public static final String MESSAGE_OWNER_OTHER = "1";
 
   private String mAuthorName = null;
   private String mMessageContent = "";
-  private String mMessageTimeStamp = "";
   private String mMessageOwner = MESSAGE_OWNER_CURRENT;
+  private String mMediaUrl = null;
+  private String mMessageType = MESSAGE_TYPE_TEXT;
 
   @BindView(R.id.message_view_holder)
-  View mMessageContentHolderView;
+  LinearLayout mMessageContentHolderView;
+
+  @BindView(R.id.message_bubble_view)
+  LinearLayout mMessageBubbleView;
 
   @BindView(R.id.message_view_content_text_view)
   TextView mMessageContentTextView;
@@ -39,6 +47,9 @@ public class MessageView extends FrameLayout {
 
   @BindView(R.id.message_author_text_view)
   TextView mAuthorTextView;
+
+  @BindView(R.id.message_view_image_view)
+  ImageView mImageView;
 
   public MessageView(Context context) {
     super(context);
@@ -61,7 +72,6 @@ public class MessageView extends FrameLayout {
       .obtainStyledAttributes(attrs, R.styleable.MessageView, defStyle, 0);
 
     this.mMessageContent = attributes.getString(R.styleable.MessageView_messageContent);
-    this.mMessageTimeStamp = attributes.getString(R.styleable.MessageView_messageTimestamp);
     this.mAuthorName = attributes.getString(R.styleable.MessageView_messageAuthorName);
     if (attributes.getString(R.styleable.MessageView_owner) != null) {
       this.mMessageOwner = attributes.getString(R.styleable.MessageView_owner);
@@ -94,23 +104,23 @@ public class MessageView extends FrameLayout {
       Gravity.END :
       Gravity.START;
 
-    int messageContentGravity = this.mMessageOwner.equals(MESSAGE_OWNER_CURRENT) ?
-            Gravity.START :
-            Gravity.END;
-
     this.mContentView.setGravity(contentViewGravity);
-    this.mMessageContentTextView.setGravity(messageContentGravity);
+    this.mMessageContentHolderView.setGravity(contentViewGravity);
+    this.mMessageBubbleView.setGravity(contentViewGravity);
 
     if (this.mAuthorName != null && this.mMessageOwner.equals(MESSAGE_OWNER_OTHER)) {
+//      this.mAuthorTextView.setVisibility(View.VISIBLE);
       this.mAuthorTextView.setText(this.mAuthorName);
     } else {
       this.mAuthorTextView.setVisibility(View.GONE);
     }
 
-  }
+    if (this.mMessageType.equals(MESSAGE_TYPE_IMAGE) && this.mMediaUrl != null) {
+      this.mMessageContentTextView.setVisibility(View.GONE);
+      Picasso.get().load(this.mMediaUrl).into(this.mImageView);
+    }
+    // TODO: Do the same with document and video
 
-  public String getMessageContent() {
-    return mMessageContent;
   }
 
   public void setMessageContent(String messageContent) {
@@ -118,30 +128,23 @@ public class MessageView extends FrameLayout {
     this.resetViewContent();
   }
 
-  public String getMessageTimeStamp() {
-    return mMessageTimeStamp;
-  }
-
-  public void setMessageTimeStamp(String messageTimeStamp) {
-    this.mMessageTimeStamp = messageTimeStamp;
-    this.resetViewContent();
-  }
-
-  public String getMessageOwner() {
-    return mMessageOwner;
-  }
-
   public void setMessageOwner(String messageOwner) {
     this.mMessageOwner = messageOwner;
     this.resetViewContent();
   }
 
-  public String getAuthorName() {
-    return mAuthorName;
-  }
-
   public void setAuthorName(String authorName) {
     this.mAuthorName = authorName;
+    this.resetViewContent();
+  }
+
+  public void setMediaUrl(String mMediaUrl) {
+    this.mMediaUrl = mMediaUrl;
+    this.resetViewContent();
+  }
+
+  public void setMessageType(String messageType) {
+    this.mMessageType = messageType;
     this.resetViewContent();
   }
 }

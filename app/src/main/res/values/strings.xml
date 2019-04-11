@@ -11,4 +11,8 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="facebook_app_id">842650729420423</string>
     <string name="fb_login_protocol_scheme">fb842650729420423</string>
+    <string name="gallery">Gallerie</string>
+    <string name="photo">Photo</string>
+    <string name="document">Document</string>
+    <string name="video">Vidéo</string>
 </resources>
