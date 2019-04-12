@@ -35,6 +35,7 @@ import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,7 +82,7 @@ public class DiscussionGroupDialog extends Dialog {
     this.dismiss();
   }
 
-  public void setmOnGroupMembersConfirmed(OnGroupMembersConfirmed mOnGroupMembersConfirmed) {
+  public void setOnGroupMembersConfirmed(OnGroupMembersConfirmed mOnGroupMembersConfirmed) {
     this.mOnGroupMembersConfirmed = mOnGroupMembersConfirmed;
   }
 
@@ -112,30 +113,47 @@ public class DiscussionGroupDialog extends Dialog {
 
     private Context mContext;
     private List<User> mContacts;
+    private List<User> mTempContacts;
+    private List<User> mSuggestions = new ArrayList<>();
 
     ContactAdapter(@NonNull Context context, @NonNull List<User> objects) {
       super(context, android.R.layout.simple_dropdown_item_1line, objects);
       this.mContext = context;
       this.mContacts = objects;
+      this.mTempContacts = new ArrayList<>(objects);
     }
 
     @NonNull
     @Override
     public Filter getFilter() {
       return new Filter() {
+
         @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-          FilterResults results = new FilterResults();
-          results.values = mContacts
-            .stream()
-            .filter(contact -> contact.getFullName().toLowerCase().contains(constraint.toString().toLowerCase()))
-            .collect(Collectors.toList());
+        public CharSequence convertResultToString(Object resultValue) {
+          return ((User) resultValue).getFullName();
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {FilterResults results = new FilterResults();
+          if (constraint != null) {
+            mSuggestions.clear();
+            mSuggestions = mTempContacts
+              .stream()
+              .filter(contact -> contact.getFullName().toLowerCase().contains(constraint.toString().toLowerCase()))
+              .collect(Collectors.toList());
+            results.count = mSuggestions.size();
+            results.values = mSuggestions;
+          }
           return results;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-          notifyDataSetChanged();
+          if (results.values != null && results.count > 0) {
+            clear();
+            addAll((List<User>) results.values);
+            notifyDataSetChanged();
+          }
         }
       };
     }

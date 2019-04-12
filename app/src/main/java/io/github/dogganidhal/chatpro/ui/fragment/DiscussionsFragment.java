@@ -15,11 +15,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.github.dogganidhal.chatpro.R;
 import io.github.dogganidhal.chatpro.model.DiscussionViewHolderModel;
+import io.github.dogganidhal.chatpro.model.User;
 import io.github.dogganidhal.chatpro.ui.activity.ChatActivity;
 import io.github.dogganidhal.chatpro.ui.view.DiscussionGroupDialog;
 import io.github.dogganidhal.chatpro.ui.adapter.DiscussionViewAdapter;
@@ -92,13 +95,19 @@ public class DiscussionsFragment extends Fragment {
     this.mViewModel.getContacts()
       .addOnSuccessListener(users -> {
         DiscussionGroupDialog dialog = new DiscussionGroupDialog(this.getContext(), this.getActivity(), users);
-        dialog.setmOnGroupMembersConfirmed(contacts ->
-          this.mViewModel.createGroupDiscussion(contacts)
-            .addOnSuccessListener(discussion -> {
-              Intent intent = ChatActivity.getStartingIntentFromDiscussion(this.getContext(), discussion.getDiscussionId(), discussion.getDiscussionTitle());
-              this.getActivity().startActivity(intent);
-            })
-        );
+        dialog.setOnGroupMembersConfirmed(new DiscussionGroupDialog.OnGroupMembersConfirmed() {
+          @Override
+          public void onSelectMembers(List<User> contacts) {
+            mViewModel.createGroupDiscussion(contacts)
+              .addOnSuccessListener(discussion -> {
+                Intent intent = ChatActivity.getStartingIntentFromDiscussion(getContext(), discussion.getDiscussionId(), discussion.getDiscussionTitle());
+                getActivity().startActivity(intent);
+              })
+              .addOnFailureListener(exception -> {
+                System.out.println(exception);
+              });
+          }
+        });
         dialog.show();
       });
   }

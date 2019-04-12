@@ -93,15 +93,24 @@ public class DiscussionsViewModel extends ViewModel {
         if (!task.isSuccessful() || task.getResult() == null) {
           throw new RuntimeException();
         }
-        return task.getResult().toObjects(User.class);
+        return task.getResult()
+          .getDocuments()
+          .stream()
+          .map(document -> {
+            User contact = document.toObject(User.class);
+            contact.setId(document.getId());
+            return contact;
+          })
+          .collect(Collectors.toList());
       });
   }
 
   public Task<DiscussionViewHolderModel> createGroupDiscussion(List<User> contacts) {
-    Map<String, String> members = contacts
-      .stream()
-      .map(member -> new AbstractMap.SimpleEntry<>(member.getId(), member.getFullName()))
-      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    Map<String, String> members = new HashMap<>();
+    members.put(this.mAuth.getCurrentUser().getUid(), this.mAuth.getCurrentUser().getDisplayName());
+    for(User contact: contacts) {
+      members.put(contact.getId(), contact.getFullName());
+    }
     Discussion discussion = new Discussion(members);
     return this.mFireStore.collection(DISCUSSIONS_COLLECTION)
       .add(discussion)
@@ -113,7 +122,7 @@ public class DiscussionsViewModel extends ViewModel {
         return new DiscussionViewHolderModel(
           discussion.getId(),
           this.buildConversationName(discussion.getMembers()),
-          DateUtils.formatDiscussionTimestamp(discussion.getLastMessage().getTimestamp()),
+          null,
           this.buildConversationName(discussion.getMembers()).substring(0, 1),
           this.extractLastMessageContent(discussion)
         );
@@ -133,6 +142,7 @@ public class DiscussionsViewModel extends ViewModel {
   }
 
   private String extractLastMessageContent(Discussion discussion) {
+    if (discussion.getLastMessage() == null) return null;
     switch (discussion.getLastMessage().getMessageType()) {
       case MESSAGE_TYPE_TEXT:
         return discussion.getLastMessage().getContent().length() > 24 ?
