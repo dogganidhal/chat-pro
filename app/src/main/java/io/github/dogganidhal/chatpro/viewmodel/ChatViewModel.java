@@ -1,22 +1,28 @@
 package io.github.dogganidhal.chatpro.viewmodel;
 
+import android.graphics.Bitmap;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.storage.StorageVolume;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import io.github.dogganidhal.chatpro.model.ChatMessageViewHolderModel;
@@ -152,6 +158,30 @@ public class ChatViewModel extends ViewModel {
       });
   }
 
+  public void sendPhotoMessage(Bitmap bitmap) {
+    String uuid = UUID.randomUUID().toString();
+    StorageReference reference = this.mStorage.getReference(String.format("%s/%s", STORAGE_IMAGES_BASE_PATH, uuid));
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+    byte[] data = baos.toByteArray();
+
+    reference.putBytes(data)
+      .continueWithTask(task -> reference.getDownloadUrl())
+      .addOnSuccessListener(uri -> {
+        FirebaseUser currentUser = this.mAuth.getCurrentUser();
+        if (currentUser == null) return;
+        User author = new User(currentUser.getUid(), currentUser.getDisplayName());
+        this.sendMessage(new Message(
+          author,
+          null,
+          this.mDiscussionId,
+          uri.toString(),
+          Message.MESSAGE_TYPE_IMAGE,
+          Timestamp.now()
+        ));
+      });
+  }
+
   private void sendMessage(Message message) {
     this.mFirestore.collection(MESSAGES_COLLECTION)
       .add(message);
@@ -160,7 +190,4 @@ public class ChatViewModel extends ViewModel {
       .update(DISCUSSION_LAST_MESSAGE_FIELD, message);
   }
 
-  public void downloadPdf(String url) {
-//    this.mStorage.getReference(String.format("%s%s", STORAGE_DOCUMENTS_BASE_PATH, ))
-  }
 }

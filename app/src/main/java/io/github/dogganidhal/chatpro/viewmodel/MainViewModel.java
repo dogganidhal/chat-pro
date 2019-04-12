@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,29 +41,34 @@ public class MainViewModel extends ViewModel {
         .addOnSuccessListener(snapshot -> {
 
           if (snapshot != null) {
-            if (snapshot.getDocuments().size() == 0) {
+
+            Optional<Discussion> discussion = snapshot.getDocuments()
+              .stream()
+              .map(document -> {
+                Discussion d = document.toObject(Discussion.class);
+                d.setId(document.getId());
+                return d;
+              })
+              .filter(d -> d.getMembers().size() == 2)
+              .findAny();
+
+            if (!discussion.isPresent()) {
               // Discussion does not exist ~> Create it
               Map<String, String> members = new HashMap<>();
               members.put(currentUser.getUid(), currentUser.getDisplayName());
               members.put(contact.getId(), contact.getFullName());
-              Discussion discussion = new Discussion(members);
+              Discussion d = new Discussion(members);
               this.mFireStore.collection(DISCUSSIONS_COLLECTION)
-                .add(discussion)
+                .add(d)
                 .addOnSuccessListener(document -> {
                   if (document != null) {
-                    discussion.setId(document.getId());
-                    callback.onSuccess(this.mapToViewHolderModel(discussion));
+                    d.setId(document.getId());
+                    callback.onSuccess(this.mapToViewHolderModel(d));
                   }
                 });
 
             } else {
-              // Discussion exists ~> Return it
-              Optional<DocumentSnapshot> document = snapshot.getDocuments().stream().findFirst();
-              if (document.isPresent()) {
-                Discussion discussion = document.get().toObject(Discussion.class);
-                discussion.setId(document.get().getId());
-                callback.onSuccess(this.mapToViewHolderModel(discussion));
-              }
+              callback.onSuccess(this.mapToViewHolderModel(discussion.get()));
             }
           }
 

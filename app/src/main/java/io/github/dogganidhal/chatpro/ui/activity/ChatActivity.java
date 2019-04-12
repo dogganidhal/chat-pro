@@ -14,8 +14,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.view.MenuItem;
@@ -101,8 +103,9 @@ public class ChatActivity extends BaseActivity {
         this.mViewModel.sendImageMessage(imageUri);
         break;
       case CAMERA_PICKER_REQUEST_CODE:
-        Uri photoUri = intent.getData();
-        this.mViewModel.sendImageMessage(photoUri);
+        Bundle extras = intent.getExtras();
+        Bitmap bitmap = (Bitmap) extras.get("data");
+        this.mViewModel.sendPhotoMessage(bitmap);
         break;
       case DOCUMENT_PICKER_REQUEST_CODE:
         Uri documentUri = intent.getData();
@@ -130,10 +133,11 @@ public class ChatActivity extends BaseActivity {
             requestCode = IMAGE_PICKER_REQUEST_CODE;
             break;
           case R.id.attachment_menu_camera:
-            // TODO: Open the camera
             intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            requestCode = CAMERA_PICKER_REQUEST_CODE;
-            break;
+            if (intent.resolveActivity(getPackageManager()) != null) {
+              startActivityForResult(intent, CAMERA_PICKER_REQUEST_CODE);
+            }
+            return;
           case R.id.attachment_menu_document:
             intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.setType("application/pdf");
