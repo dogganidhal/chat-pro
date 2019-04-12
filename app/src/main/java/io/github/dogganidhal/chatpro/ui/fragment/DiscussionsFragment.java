@@ -95,19 +95,12 @@ public class DiscussionsFragment extends Fragment {
     this.mViewModel.getContacts()
       .addOnSuccessListener(users -> {
         DiscussionGroupDialog dialog = new DiscussionGroupDialog(this.getContext(), this.getActivity(), users);
-        dialog.setOnGroupMembersConfirmed(new DiscussionGroupDialog.OnGroupMembersConfirmed() {
-          @Override
-          public void onSelectMembers(List<User> contacts) {
-            mViewModel.createGroupDiscussion(contacts)
-              .addOnSuccessListener(discussion -> {
-                Intent intent = ChatActivity.getStartingIntentFromDiscussion(getContext(), discussion.getDiscussionId(), discussion.getDiscussionTitle());
-                getActivity().startActivity(intent);
-              })
-              .addOnFailureListener(exception -> {
-                System.out.println(exception);
-              });
-          }
-        });
+        dialog.setOnGroupMembersConfirmed(contacts -> mViewModel.createGroupDiscussion(contacts)
+          .addOnSuccessListener(discussion -> {
+            Intent intent = ChatActivity.getStartingIntentFromDiscussion(getContext(), discussion.getDiscussionId(), discussion.getDiscussionTitle());
+            getActivity().startActivity(intent);
+          })
+          .addOnFailureListener(System.out::println));
         dialog.show();
       });
   }

@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/ChatProAppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".ui.view.DiscussionGroupDialog"></activity>
+        <activity android:name=".ui.view.DiscussionGroupDialog" />
         <activity android:name=".ui.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -11,6 +11,7 @@ import io.github.dogganidhal.chatpro.ui.adapter.ChatAdapter;
 import io.github.dogganidhal.chatpro.viewmodel.ChatViewModel;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,8 +19,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.AbsoluteLayout;
 
 import com.cocosw.bottomsheet.BottomSheet;
+import com.github.barteksc.pdfviewer.PDFView;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class ChatActivity extends BaseActivity {
@@ -61,6 +65,8 @@ public class ChatActivity extends BaseActivity {
 
     this.mViewModel = new ChatViewModel(discussionId);
     ChatAdapter adapter = new ChatAdapter();
+
+    adapter.setOnPdfMediaClickListener(this::onViewPdfClicked);
 
     this.mViewModel.messages.observe(this, messages -> {
       adapter.setMessageList(messages);
@@ -153,5 +159,9 @@ public class ChatActivity extends BaseActivity {
       this.mViewModel.sendTextMessage(message.toString());
       this.mMessageInputText.getText().clear();
     }
+  }
+
+  void onViewPdfClicked(String url) {
+    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
   }
 }

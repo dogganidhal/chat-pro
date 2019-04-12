@@ -149,11 +149,11 @@ public class DiscussionsViewModel extends ViewModel {
           String.format("%s %s", discussion.getLastMessage().getContent().substring(0, 24), "...") :
           discussion.getLastMessage().getContent();
       case MESSAGE_TYPE_IMAGE:
-        return "Vous a envoyé une photo";
+        return "Une photo";
       case MESSAGE_TYPE_VIDEO:
-        return "Vous a envoyé une vidéo";
+        return "Une vidéo";
       case MESSAGE_TYPE_DOCUMENT:
-          return "Vous a envoyé un document";
+          return "Un document";
     }
     return null;
   }

@@ -24,6 +24,7 @@ public class MessageView extends FrameLayout {
   public static final String MESSAGE_TYPE_TEXT = "text";
   public static final String MESSAGE_TYPE_VIDEO = "video";
   public static final String MESSAGE_TYPE_IMAGE = "image";
+  public static final String MESSAGE_TYPE_DOCUMENT = "document";
 
   public static final String MESSAGE_OWNER_CURRENT = "0";
   public static final String MESSAGE_OWNER_OTHER = "1";
@@ -33,6 +34,8 @@ public class MessageView extends FrameLayout {
   private String mMessageOwner = MESSAGE_OWNER_CURRENT;
   private String mMediaUrl = null;
   private String mMessageType = MESSAGE_TYPE_TEXT;
+
+  private OnClickListener mOnPdfMediaClickListener;
 
   @BindView(R.id.message_view_holder)
   LinearLayout mMessageContentHolderView;
@@ -123,6 +126,15 @@ public class MessageView extends FrameLayout {
       this.mMessageContentHolderView.invalidate();
       Picasso.get().load(this.mMediaUrl).into(this.mImageView);
     }
+
+    if (this.mMessageType.equals(MESSAGE_TYPE_DOCUMENT) && this.mMediaUrl != null) {
+      int color = this.mMessageOwner.equals(MESSAGE_OWNER_CURRENT) ?
+        R.color.white :
+        R.color.pink;
+      this.mMessageContentTextView.setText("Fichier Pdf");
+      this.mMessageContentTextView.setTextColor(getResources().getColor(color));
+      this.setOnClickListener(this.mOnPdfMediaClickListener);
+    }
     // TODO: Do the same with document and video
 
   }
@@ -149,6 +161,11 @@ public class MessageView extends FrameLayout {
 
   public void setMessageType(String messageType) {
     this.mMessageType = messageType;
+    this.resetViewContent();
+  }
+
+  public void setOnPdfMediaClickListener(OnClickListener mOnPdfMediaClickListener) {
+    this.mOnPdfMediaClickListener = mOnPdfMediaClickListener;
     this.resetViewContent();
   }
 }

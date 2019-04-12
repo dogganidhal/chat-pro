@@ -1,6 +1,9 @@
 package io.github.dogganidhal.chatpro.viewmodel;
 
+import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
+import android.os.Environment;
+import android.os.storage.StorageVolume;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -9,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -154,5 +158,9 @@ public class ChatViewModel extends ViewModel {
     this.mFirestore.collection(DISCUSSIONS_COLLECTION)
       .document(this.mDiscussionId)
       .update(DISCUSSION_LAST_MESSAGE_FIELD, message);
+  }
+
+  public void downloadPdf(String url) {
+//    this.mStorage.getReference(String.format("%s%s", STORAGE_DOCUMENTS_BASE_PATH, ))
   }
 }
